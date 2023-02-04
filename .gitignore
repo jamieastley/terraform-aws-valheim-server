@@ -1,0 +1,9 @@
+# IntelliJ
+.run
+.idea
+
+# Terraform
+.terraform
+**.terraform**
+**.tfstate*
+tf_plan
