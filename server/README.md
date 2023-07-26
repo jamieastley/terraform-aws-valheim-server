@@ -1,5 +1,6 @@
 ## Valheim Server
 
+
 ### Required env vars
 
 - `AWS_ACCESS_KEY_ID`
@@ -34,3 +35,8 @@ valheim_hugin_webhook_url = "https=//discord.com/api/webhooks/<your webhook url>
 </details>
 
 
+## TODOs
+
+- fix `terraform destroy` not removing docker compose file
+- update README
+- add required IAM permissions
