@@ -7,3 +7,6 @@
 **.terraform**
 **.tfstate*
 tf_plan
+
+# Valheim
+terraform.tfvars
