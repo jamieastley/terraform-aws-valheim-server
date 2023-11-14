@@ -6,7 +6,6 @@ terraform {
   }
 }
 
-// TODO: why does Terraform Cloud not work without this?
 provider "aws" {
   region     = var.aws_region
   access_key = var.aws_access_key
@@ -20,7 +19,8 @@ data "http" "dev_outbound_ip" {
 }
 
 module "valheim_server" {
-  source = "github.com/jamieastley/ec2-terraform-template?ref=aws-vars"
+  // TODO: add version tag
+  source = "github.com/jamieastley/ec2-terraform-template"
 
   app_name          = var.app_name
   ssh_key_name      = var.ssh_key_name
@@ -40,7 +40,7 @@ module "valheim_server" {
   enable_ssl_staging = var.enable_ssl_staging
   dns_email_address  = var.dns_email_address
 
-  instance_user_data = templatefile("${path.module}/scripts/init-docker.tftpl", {
+  instance_user_data = templatefile("../templates/init-docker.tftpl", {
     bucket        = var.s3_bucket_name
     username      = var.ec2_username
     base_key_path = var.s3_folder_path
