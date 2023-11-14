@@ -1,0 +1,31 @@
+version: "3"
+# MUST be lowercase
+name: "valheim"
+services:
+  server:
+    image: ${image}
+    stop_signal: SIGINT
+    restart: always
+    ports:
+      - 2456:2456/udp
+      - 2457:2457/udp
+      - 2458:2458/udp
+      - 3000:3000
+    environment:
+      - PORT=2456
+      - NAME="${world_name}"
+      - WORLD="${world_name}"
+      - PASSWORD="${server_password}"
+      - TZ=${timezone}
+      - PUBLIC=1
+      - AUTO_UPDATE=0
+      - AUTO_BACKUP=1
+      - HTTP_PORT=3000
+      - WEBHOOK_URL=${webhook_url}
+      - WEBHOOK_INCLUDE_PUBLIC_IP=1
+      - WEBHOOK_STATUS_RUNNING=1
+      - TYPE=${server_type}
+    volumes:
+      - ~/valheim/saves:/home/steam/.config/unity3d/IronGate/Valheim
+      - ~/valheim/server:/home/steam/valheim
+      - ~/valheim/backups:/home/steam/backups
