@@ -1,15 +1,12 @@
 terraform {
   backend "s3" {
-    # partial configuration
-    key     = "terraform/${environment}/terraform.tfstate"
+    # Partial config set to empty values
+    bucket  = ""
+    key     = ""
+    region  = ""
     encrypt = true
-  }
-}
 
-provider "aws" {
-  region     = var.aws_region
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+  }
 }
 
 data "http" "dev_outbound_ip" {
@@ -18,37 +15,27 @@ data "http" "dev_outbound_ip" {
   url   = "https://ipv4.icanhazip.com"
 }
 
-module "valheim_server" {
-  // TODO: add version tag
-  source = "github.com/jamieastley/ec2-terraform-template"
+module "valheim" {
+  source  = "jamieastley/ec2-template/aws"
+  version = "0.3.0"
 
   app_name          = var.app_name
-  ssh_key_name      = var.ssh_key_name
-  aws_ami           = var.aws_ami
+  aws_ami           = "ami-003f5a76758516d1e"
   aws_instance_type = var.aws_instance_type
-  aws_region        = var.aws_region
-  aws_access_key    = var.aws_access_key
-  aws_secret_key    = var.aws_secret_key
-  #  S3 setup
-  s3_bucket_id   = aws_s3_object.docker_compose.bucket
-  s3_folder_path = var.s3_folder_path
-
-  #  Route53
-  hosted_zone_id     = data.aws_route53_zone.hosted_zone.id
-  hosted_zone_name   = var.hosted_zone_name
-  subdomain_name     = var.subdomain_name
-  enable_ssl_staging = var.enable_ssl_staging
-  dns_email_address  = var.dns_email_address
-
-  instance_user_data = templatefile("../templates/init-docker.tftpl", {
-    bucket        = var.s3_bucket_name
-    username      = var.ec2_username
-    base_key_path = var.s3_folder_path
+  environment       = var.environment
+  instance_user_data = templatefile(local.init_ec2_template_path, {
+    bucket                     = var.s3_bucket_name
+    docker_compose_s3_key_path = local.docker_compose_s3_key_path
+    app_name                   = var.app_name
+    docker_compose_file        = local.docker_compose_file
+    username                   = "ubuntu"
   })
-
+  s3_arn_allow_list = [
+    "arn:aws:s3:::${var.s3_bucket_name}/${var.base_s3_key}*"
+  ]
+  ssh_key_name = var.ssh_key_name
   ingress_rules = flatten([
     [
-
       {
         description      = "HTTP traffic"
         from_port        = 80
@@ -64,22 +51,6 @@ module "valheim_server" {
         protocol    = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
       },
-      {
-        description      = "Allows Valheim game traffic to the server"
-        from_port        = 2456
-        to_port          = 2458
-        protocol         = "udp"
-        cidr_blocks      = ["0.0.0.0/0"]
-        ipv6_cidr_blocks = ["::/0"]
-      },
-      {
-        description      = "Port which will be used to access Hugin"
-        from_port        = 3000
-        to_port          = 3000
-        protocol         = "tcp"
-        cidr_blocks      = ["0.0.0.0/0"]
-        ipv6_cidr_blocks = ["::/0"]
-      }
     ],
     length(data.http.dev_outbound_ip) != 0 ? [
       {
@@ -102,4 +73,5 @@ module "valheim_server" {
       ipv6_cidr_blocks = ["::/0"]
     }
   ]
+
 }
