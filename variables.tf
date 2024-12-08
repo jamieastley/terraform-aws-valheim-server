@@ -102,6 +102,24 @@ variable "valheim_server_type" {
   }
 }
 
+# DNS/CloudFlare
+variable "dns_record_name" {
+  description = "The name of the DNS record to create"
+  type        = string
+}
+
+variable "dns_zone_id" {
+  description = "The ID of the zone to create the DNS record in"
+  type        = string
+  sensitive   = true
+}
+
+variable "dns_record_proxied" {
+  description = "Whether the DNS record should be proxied by Cloudflare"
+  type        = bool
+  default     = true
+}
+
 # Debug
 variable "is_local_debug" {
   description = "Whether Terraform is being run on your local machine or not"

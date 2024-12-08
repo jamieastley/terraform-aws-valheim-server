@@ -5,7 +5,18 @@ terraform {
     key     = ""
     region  = ""
     encrypt = true
+  }
 
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.80"
+    }
+
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 4.47"
+    }
   }
 }
 
