@@ -8,6 +8,7 @@
 **.tfstate*
 tf_plan
 variables.tfvars
+dev-state.config
 
 # 1Password
 .op
