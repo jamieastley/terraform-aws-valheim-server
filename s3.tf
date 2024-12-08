@@ -7,8 +7,8 @@ locals {
 }
 
 resource "aws_s3_object" "docker_compose" {
-  bucket         = data.aws_s3_bucket.valheim_bucket.id
-  key            = "${var.s3_folder_path}/docker-compose.yml"
+  bucket = data.aws_s3_bucket.valheim_bucket.id
+  key    = "${var.s3_folder_path}/docker-compose.yml"
   content_base64 = base64encode(templatefile(local.docker_compose_template_path, {
     image           = var.docker_image
     world_name      = var.valheim_world_name
