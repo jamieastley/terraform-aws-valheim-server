@@ -1,12 +1,14 @@
+locals {
+  docker_compose_file          = "docker-compose.yml"
+  docker_compose_template_path = "templates/docker-compose.tftpl"
+  docker_compose_s3_key_path   = "${var.base_s3_key}/scripts/${local.docker_compose_file}"
+  init_ec2_template_path       = "templates/init-ec2.tftpl"
+}
+
 # S3
 variable "environment" {
   description = "The environment in which the EC2 instance will be provisioned. Value will also be applied as tag to each resource."
   type        = string
-  default     = "dev"
-  validation {
-    condition     = contains(["dev", "production"], var.environment)
-    error_message = "The environment of the Valheim server. Must be either `dev` or `production`"
-  }
 }
 
 # EC2
@@ -17,42 +19,10 @@ variable "aws_instance_type" {
   default     = "t3a.medium"
 }
 
-variable "aws_region" {
-  description = "The region in which the EC2 instance will be provisioned"
-  type        = string
-  nullable    = false
-}
-
-variable "aws_access_key" {
-  description = "The AWS access key to use for provisioning"
-  type        = string
-  nullable    = false
-  sensitive   = true
-}
-
-variable "aws_secret_key" {
-  description = "The AWS secret key to use for provisioning"
-  type        = string
-  nullable    = false
-  sensitive   = true
-}
-
 variable "aws_ami" {
   description = "The AMI to use for the EC2 instance"
   type        = string
   nullable    = false
-}
-
-variable "vpc_cidr" {
-  description = "CIDR block for VPC"
-  type        = string
-  default     = "10.0.0.0/16"
-}
-
-variable "vpc_enable_nat_gateway" {
-  description = "Enable NAT gateway for VPC"
-  type        = bool
-  default     = true
 }
 
 variable "app_name" {
@@ -67,33 +37,10 @@ variable "ssh_key_name" {
   sensitive   = true
 }
 
-variable "dns_email_address" {
-  description = "The email address which will be used for requesting certificates from LetsEncrypt"
-  type        = string
-  sensitive   = true
-}
-
-variable "hosted_zone_name" {
-  description = "The name of the existing hosted zone which the subdomain will be created in"
-  type        = string
-}
-
-variable "subdomain_name" {
-  description = "The subdomain on which the example will be deployed to"
-  type        = string
-  default     = "example"
-}
-
 variable "log_secure_values" {
   description = "Enables or disables the output of secure values"
   type        = bool
   default     = false
-}
-
-variable "enable_ssl_staging" {
-  description = "Enable SSL staging for Lets Encrypt"
-  type        = bool
-  default     = true
 }
 
 variable "ec2_username" {
@@ -114,13 +61,12 @@ variable "s3_bucket_name" {
   type        = string
 }
 
-variable "s3_folder_path" {
-  description = "The path within the S3 bucket to use for game data backups"
+variable "base_s3_key" {
+  description = "The base key for files in the S3 bucket for this module"
   type        = string
 }
 
 # Valheim config
-
 variable "valheim_world_name" {
   description = "The name of the Valheim world to use"
   type        = string
@@ -157,7 +103,6 @@ variable "valheim_server_type" {
 }
 
 # Debug
-
 variable "is_local_debug" {
   description = "Whether Terraform is being run on your local machine or not"
   type        = bool
