@@ -7,6 +7,8 @@
 **.terraform**
 **.tfstate*
 tf_plan
+variables.tfvars
 
-# Valheim
-terraform.tfvars
+# 1Password
+.op
+aws.env
