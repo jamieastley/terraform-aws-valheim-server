@@ -30,8 +30,8 @@ module "valheim_server" {
   aws_access_key    = var.aws_access_key
   aws_secret_key    = var.aws_secret_key
   #  S3 setup
-  s3_bucket_id      = aws_s3_object.docker_compose.bucket
-  s3_folder_path    = var.s3_folder_path
+  s3_bucket_id   = aws_s3_object.docker_compose.bucket
+  s3_folder_path = var.s3_folder_path
 
   #  Route53
   hosted_zone_id     = data.aws_route53_zone.hosted_zone.id
