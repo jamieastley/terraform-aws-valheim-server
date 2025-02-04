@@ -117,7 +117,7 @@ variable "dns_zone_id" {
 variable "dns_record_proxied" {
   description = "Whether the DNS record should be proxied by Cloudflare"
   type        = bool
-  default     = true
+  default     = false
 }
 
 # Debug

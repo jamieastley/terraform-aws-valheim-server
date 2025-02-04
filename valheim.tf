@@ -15,7 +15,7 @@ terraform {
 
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 4.47"
+      version = "~> 5.0"
     }
   }
 }
