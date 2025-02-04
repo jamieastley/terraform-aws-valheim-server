@@ -10,7 +10,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.80"
+      version = "~> 5.85"
     }
 
     cloudflare = {
@@ -28,10 +28,11 @@ data "http" "dev_outbound_ip" {
 
 module "valheim" {
   source  = "jamieastley/ec2-template/aws"
-  version = "0.3.0"
+  version = "0.4.0"
 
   app_name          = var.app_name
-  aws_ami           = "ami-003f5a76758516d1e"
+  app_description   = "Valheim game server"
+  aws_ami           = var.aws_ami
   aws_instance_type = var.aws_instance_type
   environment       = var.environment
   instance_user_data = templatefile(local.init_ec2_template_path, {
