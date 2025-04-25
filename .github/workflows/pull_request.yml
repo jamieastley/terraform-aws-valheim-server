@@ -4,16 +4,38 @@ on:
   pull_request:
 
 jobs:
+  validate_main_module:
+    runs-on: ubuntu-latest
+    name: "Validate module"
+    outputs:
+      fmtOutcome: ${{ steps.setup.outputs.fmtOutcome }}
+      initOutcome: ${{ steps.setup.outputs.initOutcome }}
+      validateOutcome: ${{ steps.setup.outputs.validateOutcome }}
+      validateOutput: ${{ steps.setup.outputs.validateOutput }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        id: setup
+  
   validate_backend_module:
-    uses: jamieastley/terraform_gh_actions/.github/workflows/validate_terraform_module.yml@v1.0.0
+    runs-on: ubuntu-latest
     name: "Validate backend module"
-    with:
-      terraform_version: ${{ vars.TERRAFORM_VERSION }}
+    outputs:
+      fmtOutcome: ${{ steps.setup.outputs.fmtOutcome }}
+      initOutcome: ${{ steps.setup.outputs.initOutcome }}
+      validateOutcome: ${{ steps.setup.outputs.validateOutcome }}
+      validateOutput: ${{ steps.setup.outputs.validateOutput }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        id: setup
+        with:
+          working-directory: 'modules/backend'
 
   output_terraform_results:
     name: "Output Terraform results"
     runs-on: ubuntu-latest
-    needs: [ validate_backend_module ]
+    needs: [ validate_main_module, validate_backend_module ]
     permissions:
       pull-requests: write
       issues: write
@@ -21,10 +43,14 @@ jobs:
       - uses: actions/github-script@v7
         if: github.event_name == 'pull_request'
         env:
-          BACKEND_MODULE_FMT: ${{ needs.validate_backend_module.outputs.fmtOutcome }}
-          BACKEND_MODULE_INIT: ${{ needs.validate_backend_module.outputs.initOutcome }}
-          BACKEND_MODULE_VALIDATE: ${{ needs.validate_backend_module.outputs.validateOutcome }}
-          BACKEND_MODULE_VALIDATE_OUTPUT: ${{ needs.validate_backend_module.outputs.validateOutput }}
+          MODULE_FMT: ${{ needs.validate_main_module.outputs.fmtOutcome }}
+          MODULE_INIT: ${{ needs.validate_main_module.outputs.initOutcome }}
+          MODULE_VALIDATE: ${{ needs.validate_main_module.outputs.validateOutcome }}
+          MODULE_VALIDATE_OUTPUT: ${{ needs.validate_main_module.outputs.validateOutput }}
+          BACKEND_FMT: ${{ needs.validate_backend_module.outputs.fmtOutcome }}
+          BACKEND_INIT: ${{ needs.validate_backend_module.outputs.initOutcome }}
+          BACKEND_VALIDATE: ${{ needs.cvalidate_backend_module.outputs.validateOutcome }}
+          BACKEND_VALIDATE_OUTPUT: ${{ needs.validate_backend_module.outputs.validateOutput }}
 
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -44,18 +70,30 @@ jobs:
             const output = `## ${title}
 
             ### Module
-            #### Terraform fmt 🖌\`${{ env.BACKEND_MODULE_FMT }}\`
-            #### Terraform init ⚙️\`${{ env.BACKEND_MODULE_INIT }}\`
-            #### Terraform validate 🤖\`${{ env.BACKEND_MODULE_VALIDATE }}\`
+            #### Terraform fmt 🖌\`${{ env.MODULE_FMT }}\`
+            #### Terraform init ⚙️\`${{ env.MODULE_INIT }}\`
+            #### Terraform validate 🤖\`${{ env.MODULE_VALIDATE }}\`
             <details><summary>Validation Output</summary>
 
             \`\`\`\n
-            ${{ env.BACKEND_MODULE_VALIDATE_OUTPUT }}
+            ${{ env.MODULE_VALIDATE_OUTPUT }}
             \`\`\`
 
             </details>
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            ### Example 
+            #### Terraform fmt 🖌\`${{ env.BACKEND_FMT }}\`
+            #### Terraform init ⚙️\`${{ env.BACKEND_INIT }}\`
+            #### Terraform validate 🤖\`${{ env.BACKEND_VALIDATE }}\`
+            <details><summary>Validation Output</summary>
+
+            \`\`\`\n
+            ${{ env.BACKEND_VALIDATE_OUTPUT }}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
             // 3. If we have a comment, update it, otherwise create a new one
             if (botComment) {
