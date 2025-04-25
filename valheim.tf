@@ -15,7 +15,7 @@ terraform {
 
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 5.0"
+      version = ">= 5.3"
     }
   }
 }
@@ -28,7 +28,7 @@ data "http" "dev_outbound_ip" {
 
 module "valheim" {
   source  = "jamieastley/ec2-template/aws"
-  version = "0.4.0"
+  version = "0.5.0"
 
   app_name          = var.app_name
   app_description   = "Valheim game server"
