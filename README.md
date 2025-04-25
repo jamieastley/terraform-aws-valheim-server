@@ -48,7 +48,7 @@ prefixed with `TF_VAR_`).
 ```terraform
 app_name                  = "Valheim"
 aws_ami                   = "ami-0e040c48614ad1327"
-ssh_key_name              = "<ssh-key-name>"
+ec2_public_key            = "<ssh-public-key>"
 s3_bucket_name            = "njordland-dev-c3acfcce-01c3-a2ce-4bd2-3b42df27b101"
 base_s3_key               = "<base-s3-key-path>"
 ec2_username              = "<ec2-user>"

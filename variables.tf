@@ -31,8 +31,8 @@ variable "app_name" {
   nullable    = false
 }
 
-variable "ssh_key_name" {
-  description = "The name of the SSH key that will be used to access the provisioned instance"
+variable "ec2_public_key" {
+  description = "The public key to use for the EC2 instance"
   type        = string
   sensitive   = true
 }

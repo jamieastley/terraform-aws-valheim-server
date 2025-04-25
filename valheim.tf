@@ -28,7 +28,7 @@ data "http" "dev_outbound_ip" {
 
 module "valheim" {
   source  = "jamieastley/ec2-template/aws"
-  version = "0.5.0"
+  version = "0.6.0"
 
   app_name          = var.app_name
   app_description   = "Valheim game server"
@@ -45,7 +45,7 @@ module "valheim" {
   s3_arn_allow_list = [
     "arn:aws:s3:::${var.s3_bucket_name}/${var.base_s3_key}*"
   ]
-  ssh_key_name = var.ssh_key_name
+  ec2_public_key = var.ec2_public_key
   ingress_rules = flatten([
     [
       {
@@ -86,5 +86,4 @@ module "valheim" {
       ipv6_cidr_blocks = ["::/0"]
     }
   ]
-
 }
