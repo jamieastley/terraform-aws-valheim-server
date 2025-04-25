@@ -4,7 +4,7 @@ echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] 
 sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release -y
 sudo apt-get update
 sudo apt-get install awscli docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
-sudo usermod -aG docker $USER
+sudo usermod -aG docker "$USER"
 
 /bin/aws s3 cp s3://${bucket}/${docker_compose_s3_key_path} /home/${username}/${app_name}/${docker_compose_file}
 
