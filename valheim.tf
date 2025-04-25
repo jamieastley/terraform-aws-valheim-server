@@ -49,20 +49,21 @@ module "valheim" {
   ingress_rules = flatten([
     [
       {
-        description      = "HTTP traffic"
-        from_port        = 80
-        to_port          = 80
-        protocol         = "tcp"
+        description      = "Allows Valheim game traffic to the server"
+        from_port        = 2456
+        to_port          = 2458
+        protocol         = "udp"
         cidr_blocks      = ["0.0.0.0/0"]
         ipv6_cidr_blocks = ["::/0"]
       },
       {
-        description = "HTTPS traffic"
-        from_port   = 443
-        to_port     = 443
-        protocol    = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-      },
+        description      = "Port which will be used to access Hugin"
+        from_port        = 3000
+        to_port          = 3000
+        protocol         = "tcp"
+        cidr_blocks      = ["0.0.0.0/0"]
+        ipv6_cidr_blocks = ["::/0"]
+      }
     ],
     length(data.http.dev_outbound_ip) != 0 ? [
       {
