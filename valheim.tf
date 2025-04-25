@@ -22,7 +22,7 @@ terraform {
 
 data "http" "dev_outbound_ip" {
   // only get IP if `is_local_debug` is true
-  count = var.is_local_debug ? 1 : 0
+  count = var.enable_ssh_access ? 1 : 0
   url   = "https://ipv4.icanhazip.com"
 }
 
@@ -40,7 +40,7 @@ module "valheim" {
     docker_compose_s3_key_path = local.docker_compose_s3_key_path
     app_name                   = var.app_name
     docker_compose_file        = local.docker_compose_file
-    username                   = "ubuntu"
+    username                   = var.ec2_username
   })
   s3_arn_allow_list = [
     "arn:aws:s3:::${var.s3_bucket_name}/${var.base_s3_key}*"

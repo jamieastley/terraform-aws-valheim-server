@@ -127,8 +127,8 @@ variable "dns_record_ttl" {
 }
 
 # Debug
-variable "is_local_debug" {
-  description = "Whether Terraform is being run on your local machine or not"
+variable "enable_ssh_access" {
+  description = "Sets whether to enable SSH access to the EC2 instance"
   type        = bool
   default     = false
 }
