@@ -1,0 +1,55 @@
+# https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-composite-action
+name: "Setup and validate environment"
+
+inputs:
+  working-directory:
+    description: 'The directory that steps should be executed in'
+    default: './'
+
+outputs:
+  fmtOutcome:
+    description: 'Outcome of terraform fmt -check'
+    value: ${{ steps.fmt.outcome }}
+  initOutcome:
+    description: 'Outcome of terraform init'
+    value: ${{ steps.init.outcome }}
+  validateOutcome:
+    description: 'Outcome of terraform validate'
+    value: ${{ steps.validate.outcome }}
+  validateOutput:
+    description: 'stdout of terraform validate'
+    value: ${{ steps.validate.outputs.stdout }}
+
+runs:
+  using: composite
+  steps:
+    # ensure checkout step is run before calling this action
+    - uses: 'moonrepo/setup-toolchain@v0'
+      with:
+        auto-install: true
+
+    - name: Terraform Format check
+      id: fmt
+      working-directory: ${{ inputs.working-directory }}
+      run: terraform fmt -check
+      shell: bash
+
+    - name: Terraform Init
+      id: init
+      working-directory: ${{ inputs.working-directory }}
+      run: terraform init
+      shell: bash
+
+    - name: Terraform Validate
+      id: validate
+      working-directory: ${{ inputs.working-directory }}
+      run: terraform validate -no-color
+      shell: bash
+
+    - run: |
+        echo "fmtOutcome: ${{ steps.fmt.outcome }}"
+        echo "initOutcome: ${{ steps.init.outcome }}"
+        echo "validateOutcome: ${{ steps.validate.outcome }}"
+        echo "validateOutput: ${{ steps.validate.outputs.stdout }}"
+      name: Output debug
+      shell: bash
