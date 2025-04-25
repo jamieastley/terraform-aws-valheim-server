@@ -120,6 +120,12 @@ variable "dns_record_proxied" {
   default     = false
 }
 
+variable "dns_record_ttl" {
+  description = "The TTL for the DNS record. Defaults to automatic if not set."
+  type        = number
+  default     = 1
+}
+
 # Debug
 variable "is_local_debug" {
   description = "Whether Terraform is being run on your local machine or not"

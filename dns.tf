@@ -4,9 +4,5 @@ resource "cloudflare_dns_record" "dns_record" {
   proxied = var.dns_record_proxied
   zone_id = var.dns_zone_id
   content = module.valheim.elastic_ip
-  ttl     = 3600
-  tags = [
-    "app:${var.app_name}",
-    "Environment:${var.environment}"
-  ]
+  ttl     = var.dns_record_ttl
 }
