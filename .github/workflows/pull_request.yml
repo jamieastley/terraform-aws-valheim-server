@@ -23,9 +23,9 @@ jobs:
         with:
           export-env: 'true'
         env:
-          TF_VAR_bucket: op://Valheim/S3 backend/bucket
-          TF_VAR_key: op://Valheim/S3 backend/key
-          TF_VAR_region: op://Valheim/S3 backend/region
+          TF_VAR_bucket: "op://Valheim/S3 backend/bucket"
+          TF_VAR_key: "op://Valheim/S3 backend/key"
+          TF_VAR_region: "op://Valheim/S3 backend/region"
       - uses: ./.github/actions/setup
         id: setup
       - name: Terraform Format check
