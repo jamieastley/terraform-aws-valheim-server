@@ -18,6 +18,8 @@ jobs:
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
       - uses: 1password/load-secrets-action@v2
+        with:
+          export-env: true
         env:
           TF_VAR_bucket: op://Valheim/S3 backend/bucket
           TF_VAR_key: op://Valheim/S3 backend/key
