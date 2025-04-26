@@ -3,12 +3,6 @@ name: "Pull Request"
 on:
   pull_request:
 
-env:
-  TF_VAR_bucket: "${{ secrets.TF_VAR_BUCKET }}"
-  TF_VAR_key: "${{ secrets.TF_VAR_KEY }}"
-  TF_VAR_region: "${{ secrets.TF_VAR_REGION }}"
-  AWS_REGION: "${{ secrets.AWS_REGION }}"
-
 jobs:
   validate_main_module:
     runs-on: ubuntu-latest
@@ -20,18 +14,18 @@ jobs:
       validateOutput: ${{ steps.validate.outputs.stdout }}
     steps:
       - uses: actions/checkout@v4
-      #      - uses: 1password/load-secrets-action/configure@v2
-      #        with:
-      #          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-      #      - name: Load secrets
-      #        id: load-secrets
-      #        uses: 1password/load-secrets-action@v2
-      #        with:
-      #          export-env: 'true'
-      #        env:
-      #          TF_VAR_bucket: "op://Valheim/S3 backend/bucket"
-      #          TF_VAR_key: "op://Valheim/S3 backend/key"
-      #          TF_VAR_region: "op://Valheim/S3 backend/region"
+      - uses: 1password/load-secrets-action/configure@v2
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+      - name: Load secrets
+        id: load-secrets
+        uses: 1password/load-secrets-action@v2
+        with:
+          export-env: 'true'
+        env:
+          TF_VAR_bucket: "op://Valheim/S3 backend/bucket"
+          TF_VAR_key: "op://Valheim/S3 backend/key"
+          AWS_REGION: "op://Valheim/S3 backend/region"
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.11.4"
