@@ -17,8 +17,6 @@ terraform {
   }
 }
 
-provider "aws" {}
-
 data "http" "dev_outbound_ip" {
   // only get IP if `is_local_debug` is true
   count = var.enable_ssh_access ? 1 : 0
