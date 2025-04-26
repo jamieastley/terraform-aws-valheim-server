@@ -3,6 +3,11 @@ name: "Pull Request"
 on:
   pull_request:
 
+env:
+  TF_VAR_bucket: "${{ secrets.TF_VAR_BUCKET }}"
+  TF_VAR_key: "${{ secrets.TF_VAR_KEY }}"
+  TF_VAR_region: "${{ secrets.TF_VAR_REGION }}"
+
 jobs:
   validate_main_module:
     runs-on: ubuntu-latest
@@ -30,23 +35,17 @@ jobs:
         id: setup
       - name: Terraform Format check
         id: fmt
-        working-directory: ${{ inputs.working-directory }}
         run: terraform fmt -check
         shell: bash
 
       - name: Terraform Init
         id: init
-        working-directory: ${{ inputs.working-directory }}
         run: terraform init
         shell: bash
-        env:
-          TF_VAR_bucket: "${{ secrets.TF_VAR_BUCKET }}"
-          TF_VAR_key: "${{ secrets.TF_VAR_KEY }}"
-          TF_VAR_region: "${{ secrets.TF_VAR_REGION }}"
+
 
       - name: Terraform Validate
         id: validate
-        working-directory: ${{ inputs.working-directory }}
         run: terraform validate -no-color
         shell: bash
 
