@@ -14,6 +14,14 @@ jobs:
       validateOutput: ${{ steps.setup.outputs.validateOutput }}
     steps:
       - uses: actions/checkout@v4
+      - uses: 1password/load-secrets-action/configure@v2
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+      - uses: 1password/load-secrets-action@v2
+        env:
+          TF_VAR_bucket: op://Valheim/S3 backend/bucket
+          TF_VAR_key: op://Valheim/S3 backend/key
+          TF_VAR_region: op://Valheim/S3 backend/region
       - uses: ./.github/actions/setup
         id: setup
   
