@@ -14,8 +14,6 @@ jobs:
       validateOutput: ${{ steps.validate.outputs.stdout }}
     steps:
       - uses: actions/checkout@v4
-
-
 #      - uses: 1password/load-secrets-action/configure@v2
 #        with:
 #          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
