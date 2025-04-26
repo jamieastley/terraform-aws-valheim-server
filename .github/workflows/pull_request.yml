@@ -4,8 +4,8 @@ on:
   pull_request:
 
 env:
-  TF_VAR_BUCKET: '"testBucket"'
-  TF_VAR_KEY: '"testKey"'
+  TF_VAR_BUCKET: "testBucket"
+  TF_VAR_KEY: "testKey"
 
 jobs:
   validate_main_module:
