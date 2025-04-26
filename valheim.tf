@@ -1,6 +1,9 @@
 terraform {
   backend "s3" {
     # Partial config set to empty values
+    bucket  = ""
+    key     = ""
+    region  = ""
     encrypt = true
   }
 

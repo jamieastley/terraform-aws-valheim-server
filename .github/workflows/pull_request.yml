@@ -37,18 +37,14 @@ jobs:
       - name: Terraform Format check
         id: fmt
         run: terraform fmt -check
-        shell: bash
 
       - name: Terraform Init
         id: init
         run: terraform init
-        shell: bash
-
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-        shell: bash
 
       - run: |
           echo "fmtOutcome: ${{ steps.fmt.outcome }}"
