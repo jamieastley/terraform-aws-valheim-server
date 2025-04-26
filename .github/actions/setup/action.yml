@@ -23,6 +23,8 @@ outputs:
 runs:
   using: composite
   steps:
+    - run: echo $TF_VAR_region
+      shell: bash
     # ensure checkout step is run before calling this action
     - uses: 'moonrepo/setup-toolchain@v0'
       with:
