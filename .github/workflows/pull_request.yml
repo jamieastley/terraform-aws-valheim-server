@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     name: "Validate module"
     outputs:
-      fmtOutcome: ${{ steps.setup.outputs.fmtOutcome }}
-      initOutcome: ${{ steps.setup.outputs.initOutcome }}
-      validateOutcome: ${{ steps.setup.outputs.validateOutcome }}
-      validateOutput: ${{ steps.setup.outputs.validateOutput }}
+      fmtOutcome:  ${{ steps.fmt.outcome }}
+      initOutcome: ${{ steps.init.outcome }}
+      validateOutcome: ${{ steps.validate.outcome }}
+      validateOutput: ${{ steps.validate.outputs.stdout }}
     steps:
       - uses: actions/checkout@v4
       - uses: 1password/load-secrets-action/configure@v2
@@ -20,31 +20,82 @@ jobs:
       - name: Load secrets
         id: load-secrets
         uses: 1password/load-secrets-action@v2
+        with:
+          export-env: 'true'
         env:
-          BUCKET: op://Valheim/S3 backend/bucket
-          KEY: op://Valheim/S3 backend/key
-          REGION: op://Valheim/S3 backend/region
+          TF_VAR_bucket: op://Valheim/S3 backend/bucket
+          TF_VAR_key: op://Valheim/S3 backend/key
+          TF_VAR_region: op://Valheim/S3 backend/region
       - uses: ./.github/actions/setup
         id: setup
-        env:
-          TF_VAR_bucket: 'test'
-          TF_VAR_key: 'testKey'
-          TF_VAR_region: 'us-east-1'
+      - name: Terraform Format check
+        id: fmt
+        working-directory: ${{ inputs.working-directory }}
+        run: terraform fmt -check
+        shell: bash
+
+      - name: Terraform Init
+        id: init
+        working-directory: ${{ inputs.working-directory }}
+        run: terraform init
+        shell: bash
+
+      - name: Terraform Validate
+        id: validate
+        working-directory: ${{ inputs.working-directory }}
+        run: terraform validate -no-color
+        shell: bash
+
+      - run: |
+          echo "fmtOutcome: ${{ steps.fmt.outcome }}"
+          echo "initOutcome: ${{ steps.init.outcome }}"
+          echo "validateOutcome: ${{ steps.validate.outcome }}"
+          echo "validateOutput: ${{ steps.validate.outputs.stdout }}"
+        name: Output debug
+        shell: bash
   
   validate_backend_module:
     runs-on: ubuntu-latest
     name: "Validate backend module"
+    defaults:
+      run:
+        working-directory: 'modules/backend'
     outputs:
-      fmtOutcome: ${{ steps.setup.outputs.fmtOutcome }}
-      initOutcome: ${{ steps.setup.outputs.initOutcome }}
-      validateOutcome: ${{ steps.setup.outputs.validateOutcome }}
-      validateOutput: ${{ steps.setup.outputs.validateOutput }}
+      fmtOutcome: ${{ steps.fmt.outcome }}
+      initOutcome: ${{ steps.init.outcome }}
+      validateOutcome: ${{ steps.validate.outcome }}
+      validateOutput: ${{ steps.validate.outputs.stdout }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
         id: setup
         with:
           working-directory: 'modules/backend'
+      - name: Terraform Format check
+        id: fmt
+        working-directory: ${{ inputs.working-directory }}
+        run: terraform fmt -check
+        shell: bash
+
+      - name: Terraform Init
+        id: init
+        working-directory: ${{ inputs.working-directory }}
+        run: terraform init
+        shell: bash
+
+      - name: Terraform Validate
+        id: validate
+        working-directory: ${{ inputs.working-directory }}
+        run: terraform validate -no-color
+        shell: bash
+
+      - run: |
+          echo "fmtOutcome: ${{ steps.fmt.outcome }}"
+          echo "initOutcome: ${{ steps.init.outcome }}"
+          echo "validateOutcome: ${{ steps.validate.outcome }}"
+          echo "validateOutput: ${{ steps.validate.outputs.stdout }}"
+        name: Output debug
+        shell: bash
 
   output_terraform_results:
     name: "Output Terraform results"
