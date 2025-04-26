@@ -2,7 +2,7 @@ TF_PLAN_NAME = tf_plan
 env = "local.env"
 
 init:
-	op run --env-file=$(env) -- terraform init -backend-config="dev-state.config"
+	op run --env-file=$(env) -- terraform init
 
 init_upgrade:
 	op run --env-file=$(env) -- terraform init -upgrade

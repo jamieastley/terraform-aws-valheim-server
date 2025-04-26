@@ -10,7 +10,7 @@ The following prerequisites are required to run the module:
 
 - A CloudFlare account with a domain which the subdomain record will be created in
 - (Optional) A 1Password account to utilise the `MAKEFILE` commands
-- An existing SSH key 
+- An existing SSH key
 
 ### Backend
 
@@ -19,15 +19,6 @@ An S3 backend is required for the main module, and must be created before runnin
 If one does not already exist, one can be created via the `modules/backend` module.
 
 ### Game Server
-
-#### Backend state config
-
-The backend block uses a partial configuration, so the following variables must be set either within
-a `state.config` file or passed as args to the `terraform` commands:
-
-- `bucket`
-- `key`
-- `region`
 
 #### Required env vars
 
@@ -38,6 +29,13 @@ running the module:
 - `AWS_REGION`
 - `AWS_SECRET_ACCESS_KEY`
 - `CLOUDFLARE_API_TOKEN`
+
+Then S3 backend block uses a partial configuration, so the following environment variables are also
+expected to be set:
+
+- `TF_VAR_bucket`
+- `TF_VAR_key`
+- `TF_VAR_region`
 
 Remaining module variables can then be set via a `*.tfvars` file, or via environment variables (if
 prefixed with `TF_VAR_`).
