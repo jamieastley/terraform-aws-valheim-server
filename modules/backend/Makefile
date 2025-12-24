@@ -1,16 +1,27 @@
 TF_PLAN_NAME = tf_plan
+ENV_FILE = backend.env
+TF_WORKSPACE = dev
 
-init:
-	terraform init
+backend_init:
+	op run --env-file="$(ENV_FILE)" -- terraform init
 
-init_upgrade:
+backend_list_workspace:
+	op run --env-file="$(ENV_FILE)" -- terraform workspace list
+
+backend_new_dev_workspace:
+	op run --env-file="$(ENV_FILE)" -- terraform workspace new dev
+
+backend_select_workspace:
+	op run --env-file="$(ENV_FILE)" -- terraform workspace select $(TF_WORKSPACE)
+
+backend_init_upgrade:
 	terraform init -upgrade
 
-plan:
-	op run --env-file="aws.env" -- terraform plan -out=$(TF_PLAN_NAME) -var-file=variables.tfvars
+backend_plan:
+	op run --env-file="$(ENV_FILE)" -- terraform plan -out=$(TF_PLAN_NAME)
 
-apply:
-	op run --env-file="aws.env" -- terraform apply $(TF_PLAN_NAME)
+backend_apply_plan:
+	op run --env-file="$(ENV_FILE)" -- terraform apply $(TF_PLAN_NAME)
 
-destroy:
-	op run --env-file="aws.env" -- terraform destroy -var-file=variables.tfvars
+backend_destroy:
+	op run --env-file="$(ENV_FILE)" -- terraform destroy

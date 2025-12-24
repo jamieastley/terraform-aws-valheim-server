@@ -1,21 +1,29 @@
 terraform {
   backend "s3" {
-    # Partial config set to empty values
-    bucket  = ""
-    key     = ""
-    region  = ""
-    encrypt = true
+    bucket                      = "terraform"
+    key                         = "valheim/backend/terraform.tfstate"
+    region                      = "auto"
+    skip_credentials_validation = true
+    skip_metadata_api_check     = true
+    skip_region_validation      = true
+    skip_requesting_account_id  = true
+    skip_s3_checksum            = true
+    use_path_style              = true
+    # the following are provided via env vars
+    # AWS_SECRET_ACCESS_KEY
+    # AWS_ACCESS_KEY_ID
+    # AWS_ENDPOINT_URL_S3
   }
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.85"
+      version = "~> 6.27.0"
     }
 
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = ">= 5.3"
+      version = "~> 5.15.0"
     }
   }
 }

@@ -132,3 +132,13 @@ variable "enable_ssh_access" {
   type        = bool
   default     = false
 }
+
+# variable "bucket_name" {
+#     description = "The name of the S3 bucket to use for game data backups"
+#     type        = string
+# }
+#
+# variable "state_key" {
+#     description = "The base key for files in the S3 bucket for this module"
+#     type        = string
+# }
