@@ -5,6 +5,27 @@ locals {
   init_ec2_template_path       = "templates/init-ec2.tftpl"
 }
 
+# AWS provider
+variable "aws_provider_region" {
+  description = "The AWS region in which to provision resources"
+  type        = string
+  default     = "ap-southeast-2"
+}
+
+variable "aws_provider_access_key_id" {
+  description = "The AWS access key ID to use for the AWS provider"
+  type        = string
+  sensitive   = true
+  nullable    = true
+}
+
+variable "aws_provider_secret_key" {
+  description = "The AWS secret access key to use for the AWS provider"
+  type        = string
+  sensitive   = true
+  nullable    = true
+}
+
 # S3
 variable "environment" {
   description = "The environment in which the EC2 instance will be provisioned. Value will also be applied as tag to each resource."

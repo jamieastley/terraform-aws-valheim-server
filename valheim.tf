@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket                      = "terraform"
-    key                         = "valheim/backend/terraform.tfstate"
+    bucket                      = "tf-valheim"
+    key                         = "server/terraform.tfstate"
     region                      = "auto"
     skip_credentials_validation = true
     skip_metadata_api_check     = true
@@ -26,6 +26,12 @@ terraform {
       version = "~> 5.15.0"
     }
   }
+}
+#
+provider "aws" {
+  region     = var.aws_provider_region
+  access_key = var.aws_provider_access_key_id
+  secret_key = var.aws_provider_secret_key
 }
 
 data "http" "dev_outbound_ip" {
