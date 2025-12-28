@@ -18,7 +18,7 @@ locals {
 
 module "terraform_backend" {
   source  = "jamieastley/s3-backend/aws"
-  version = "0.3.0"
+  version = "0.6.0"
 
   app_name          = local.app_env_name
   bucket_name       = local.bucket_name
