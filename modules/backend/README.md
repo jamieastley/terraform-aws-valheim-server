@@ -1,47 +1,30 @@
 # Backend Terraform Module
 
-This module provisions a Cloudflare R2 bucket for use as backend storage, typically for Terraform state or other application data. It is designed to be used in environments where Cloudflare R2 is preferred for object storage.
+This module provisions the S3 bucket
+via [terraform-s3-backend](https://registry.terraform.io/modules/jamieastley/s3-backend/aws/latest),
+which will be used for the main module of this repository.
 
-## Features
-- Creates a Cloudflare R2 bucket with configurable name, location, and storage class.
-- Uses Cloudflare provider (version ~> 5).
-- Supports sensitive variable input for Cloudflare account ID.
+## Environment Variables
 
-## Usage
+The following AWS environment variables must be set:
 
-```hcl
-module "backend" {
-  source                  = "./modules/backend"
-  cloudflare_account_id   = var.cloudflare_account_id
-}
-```
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_REGION`
 
-## Required Variables
+## Terraform Variables
 
-| Name                   | Description                                              | Type   | Sensitive | Required |
-|------------------------|----------------------------------------------------------|--------|-----------|----------|
-| cloudflare_account_id  | The Cloudflare account ID where the R2 bucket is created | string | yes       | yes      |
-
-## Resources Created
-- `cloudflare_r2_bucket.valheim_r2_bucket`: The R2 bucket named `tf-valheim` in the `apac` location with `Standard` storage class.
-
-## Providers
-- [Cloudflare](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs)
-
-## Example
-
-See the [main.tf](main.tf) for implementation details.
+| Name     | Description                                                    | Type   | Required |
+|----------|----------------------------------------------------------------|--------|----------|
+| app_name | The name of the application to be used as the `bucket_prefix`. | string | yes      |
 
 ## Makefile Targets
+
 - `backend_init`: Initialize Terraform with environment variables.
 - `backend_plan`: Create a Terraform plan.
 - `backend_apply_plan`: Apply the Terraform plan.
 - `backend_destroy`: Destroy all managed infrastructure.
 
-## Notes
-- Cloudflare API token must be provided via the `CLOUDFLARE_API_TOKEN` environment variable.
-- See `backend.env` for environment variable configuration.
-
 ## License
-MIT
 
+MIT
