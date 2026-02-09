@@ -17,9 +17,9 @@ runs:
       id: load-secrets
       uses: 1password/load-secrets-action@v3
       env:
-        CLOUDFLARE_ACCESS_KEY_ID: "op://Valheim/tf-valheim/access_key_id"
-        CLOUDFLARE_SECRET_ACCESS_KEY: "op://Valheim/tf-valheim/secret_access_key"
-        CLOUDFLARE_ENDPOINT_URL_S3: "op://Valheim/tf-valheim/s3_endpoint"
+        CLOUDFLARE_ACCESS_KEY_ID: op://Valheim/tf-valheim/access_key_id
+        CLOUDFLARE_SECRET_ACCESS_KEY: op://Valheim/tf-valheim/secret_access_key
+        CLOUDFLARE_ENDPOINT_URL_S3: op://Valheim/tf-valheim/s3_endpoint
 
     - name: Terraform Format check
       id: fmt
