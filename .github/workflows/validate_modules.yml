@@ -18,35 +18,7 @@ jobs:
     name: "Validate ${{ matrix.module }} module"
     steps:
       - uses: actions/checkout@v6
-      - uses: hashicorp/setup-terraform@v3
+      - uses: ./.github/actions/setup
+        id: setup
         with:
-          terraform_version: "1.11"
-      - name: Load secrets
-        id: load-secrets
-        uses: 1password/load-secrets-action@v3
-        env:
-          CLOUDFLARE_ACCESS_KEY_ID: op://Valheim/tf-valheim/access_key_id
-          CLOUDFLARE_SECRET_ACCESS_KEY: op://Valheim/tf-valheim/secret_access_key
-          CLOUDFLARE_ENDPOINT_URL_S3: op://Valheim/tf-valheim/s3_endpoint
-
-      - name: Terraform Format check
-        id: fmt
-        working-directory: ${{ matrix.module }}
-        run: terraform fmt -check
-        shell: bash
-
-      - name: Terraform Init
-        id: init
-        working-directory: ${{ matrix.module }}
-        run: terraform init
-        shell: bash
-        with:
-          AWS_ACCESS_KEY_ID: ${{ steps.load-secrets.outputs.CLOUDFLARE_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.load-secrets.outputs.CLOUDFLARE_SECRET_ACCESS_KEY }}
-          AWS_ENDPOINT_URL_S3: ${{ steps.load-secrets.outputs.CLOUDFLARE_ENDPOINT_URL_S3 }}
-
-      - name: Terraform Validate
-        id: validate
-        working-directory: ${{ matrix.module }}
-        run: terraform validate -no-color
-        shell: bash
+          working-directory: '${{ matrix.module }}'
