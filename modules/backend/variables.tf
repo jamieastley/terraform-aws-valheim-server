@@ -1,6 +1,6 @@
-variable "cloudflare_account_id" {
-  description = "The Cloudflare account ID where the R2 bucket will be created"
-  sensitive   = true
+variable "app_name" {
+  description = "The name of the application. This will be used as a prefix for all resources created by this module."
   type        = string
   nullable    = false
+  default     = "valheim"
 }

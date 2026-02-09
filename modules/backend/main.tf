@@ -4,24 +4,22 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.80.0"
+      version = "~> 6.27.0"
     }
   }
 }
 
-resource "random_uuid" "uuid" {}
-
-locals {
-  app_env_name = "${var.app_name}-${var.environment_name}"
-  bucket_name  = "${local.app_env_name}-${random_uuid.uuid.result}"
+provider "aws" {
+  default_tags {
+    tags = {
+      "App" = var.app_name
+    }
+  }
 }
 
-module "terraform_backend" {
+module "s3-backend" {
   source  = "jamieastley/s3-backend/aws"
   version = "0.6.0"
 
-  app_name          = local.app_env_name
-  bucket_name       = local.bucket_name
-  dynamo_table_name = var.dynamo_table_name
-  environment_name  = var.environment_name
+  bucket_prefix = "${var.app_name}-"
 }
