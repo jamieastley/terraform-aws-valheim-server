@@ -4,11 +4,11 @@
 
 # Terraform
 .terraform
-**.terraform**
+**.terraform/**
 **.tfstate*
 tf_plan
 variables.tfvars
 
 # 1Password
 .op
-aws.env
+*.env
