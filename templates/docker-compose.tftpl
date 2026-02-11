@@ -20,6 +20,8 @@ services:
       - PUBLIC=1
       - AUTO_UPDATE=0
       - AUTO_BACKUP=1
+      # TODO: change this schedule once finished with debugging
+      - AUTO_BACKUP_SCHEDULE=*/10 * * * *
       - HTTP_PORT=3000
       - WEBHOOK_URL=${webhook_url}
       - WEBHOOK_INCLUDE_PUBLIC_IP=1

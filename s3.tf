@@ -1,14 +1,7 @@
-data "aws_s3_bucket" "valheim_bucket" {
-  bucket = var.s3_bucket_name
-}
-
-locals {
-  docker_compose_template_path = "../templates/docker-compose.tftpl"
-}
-
+# Upload the docker-compose.yaml file to the S3 bucket
 resource "aws_s3_object" "docker_compose" {
-  bucket         = data.aws_s3_bucket.valheim_bucket.id
-  key            = "${var.s3_folder_path}/docker-compose.yml"
+  bucket = var.s3_bucket_name
+  key    = local.docker_compose_s3_key_path
   content_base64 = base64encode(templatefile(local.docker_compose_template_path, {
     image           = var.docker_image
     world_name      = var.valheim_world_name
@@ -19,8 +12,4 @@ resource "aws_s3_object" "docker_compose" {
   }))
 
   etag = filemd5(local.docker_compose_template_path)
-
-  lifecycle {
-    #    prevent_destroy = true
-  }
 }
