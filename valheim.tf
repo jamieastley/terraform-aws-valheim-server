@@ -1,18 +1,13 @@
 terraform {
-  backend "s3" {
-    bucket                      = "tf-valheim"
-    key                         = "server/terraform.tfstate"
-    region                      = "auto"
-    skip_credentials_validation = true
-    skip_metadata_api_check     = true
-    skip_region_validation      = true
-    skip_requesting_account_id  = true
-    skip_s3_checksum            = true
-    use_path_style              = true
-    # the following are provided via env vars
-    # AWS_SECRET_ACCESS_KEY
-    # AWS_ACCESS_KEY_ID
-    # AWS_ENDPOINT_URL_S3
+  cloud {
+
+    organization = "jamieastley"
+
+    # https://developer.hashicorp.com/terraform/language/block/terraform#workspaces
+    # Depends on TF_WORKSPACE being set via env var
+    workspaces {
+      tags = ["valheim"]
+    }
   }
 
   required_providers {
