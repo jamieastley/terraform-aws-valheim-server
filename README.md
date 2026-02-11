@@ -12,12 +12,6 @@ The following prerequisites are required to run the module:
 - (Optional) A 1Password account to utilise the `MAKEFILE` commands
 - An existing SSH key
 
-### Backend
-
-An S3 backend is required for the main module, and must be created before running the module.
-
-If one does not already exist, one can be created via the `modules/backend` module.
-
 ### Game Server
 
 #### Required env vars
@@ -47,7 +41,7 @@ prefixed with `TF_VAR_`).
 app_name                  = "Valheim"
 aws_ami                   = "ami-0e040c48614ad1327"
 ec2_public_key            = "<ssh-public-key>"
-s3_bucket_name            = "njordland-dev-c3acfcce-01c3-a2ce-4bd2-3b42df27b101"
+s3_bucket_name            = "<S3-bucket-name>"
 base_s3_key               = "<base-s3-key-path>"
 ec2_username              = "<ec2-user>"
 valheim_world_name        = "MyValheimWorld"
@@ -66,4 +60,3 @@ environment               = "dev"
 ## TODOs
 
 - add required IAM permissions
-- OIDC module
