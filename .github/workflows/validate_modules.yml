@@ -13,6 +13,54 @@ env:
   AWS_REGION: "ap-southeast-2"
 
 jobs:
+  validate_sub_modules:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module:
+          - modules/bucket
+    name: "Validate ${{ matrix.module }} module"
+    permissions:
+      id-token: write   # This is required for requesting the OIDC JWT
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Load secrets
+        id: load-secrets
+        uses: 1password/load-secrets-action@v3
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          TF_API_TOKEN: "op://Valheim/Terraform - GitHub Actions/credential"
+          AWS_OIDC_ROLE_ARN: "op://Valheim/AWS OIDC/role_arn"
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.11"
+          cli_config_credentials_token: ${{ steps.load-secrets.outputs.TF_API_TOKEN }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.0.0
+        with:
+          role-to-assume: ${{ steps.load-secrets.outputs.AWS_OIDC_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Terraform Format check
+        id: fmt
+        working-directory: ${{ matrix.module }}
+        run: terraform fmt -check
+        shell: bash
+
+      - name: Terraform Init
+        id: init
+        working-directory: ${{ matrix.module }}
+        run: terraform init
+        shell: bash
+
+      - name: Terraform Validate
+        id: validate
+        working-directory: ${{ matrix.module }}
+        run: terraform validate -no-color
+        shell: bash
+
   validate_main_module:
     runs-on: ubuntu-latest
     name: "Validate main module"
