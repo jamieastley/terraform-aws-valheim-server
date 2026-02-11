@@ -8,6 +8,10 @@ on:
     branches:
       - master
 
+env:
+  TF_WORKSPACE: "gh-valheim-server"
+  AWS_REGION: "ap-southeast-2"
+
 jobs:
   validate_modules:
     runs-on: ubuntu-latest
@@ -16,6 +20,8 @@ jobs:
         module:
           - ./
     name: "Validate ${{ matrix.module }} module"
+    permissions:
+      id-token: write   # This is required for requesting the JWT
     steps:
       - uses: actions/checkout@v6
       - uses: hashicorp/setup-terraform@v3
@@ -26,10 +32,14 @@ jobs:
         uses: 1password/load-secrets-action@v3
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          CLOUDFLARE_ACCESS_KEY_ID: op://Valheim/tf-valheim/access_key_id
-          CLOUDFLARE_SECRET_ACCESS_KEY: op://Valheim/tf-valheim/secret_access_key
-          CLOUDFLARE_ENDPOINT_URL_S3: op://Valheim/tf-valheim/s3_endpoint
+          TF_API_TOKEN: "op://Valheim/Terraform - GitHub Actions/credential"
+          AWS_OIDC_ROLE_ARN: "op://Valheim/AWS OIDC/role_arn"
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.0.0
+        with:
+          role-to-assume: ${{ steps.load-secrets.outputs.AWS_OIDC_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
       - name: Terraform Format check
         id: fmt
         working-directory: ${{ matrix.module }}
@@ -42,9 +52,7 @@ jobs:
         run: terraform init
         shell: bash
         env:
-          AWS_ACCESS_KEY_ID: ${{ steps.load-secrets.outputs.CLOUDFLARE_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.load-secrets.outputs.CLOUDFLARE_SECRET_ACCESS_KEY }}
-          AWS_ENDPOINT_URL_S3: ${{ steps.load-secrets.outputs.CLOUDFLARE_ENDPOINT_URL_S3 }}
+          TF_API_TOKEN: ${{ steps.load-secrets.outputs.TF_API_TOKEN }}
 
       - name: Terraform Validate
         id: validate
