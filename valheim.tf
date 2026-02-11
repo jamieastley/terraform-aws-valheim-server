@@ -22,7 +22,7 @@ terraform {
     }
   }
 }
-#
+
 provider "aws" {
   region     = var.aws_provider_region
   access_key = var.aws_provider_access_key_id
