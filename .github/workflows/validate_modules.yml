@@ -24,9 +24,7 @@ jobs:
       id-token: write   # This is required for requesting the JWT
     steps:
       - uses: actions/checkout@v6
-      - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.11"
+
       - name: Load secrets
         id: load-secrets
         uses: 1password/load-secrets-action@v3
@@ -34,6 +32,11 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           TF_API_TOKEN: "op://Valheim/Terraform - GitHub Actions/credential"
           AWS_OIDC_ROLE_ARN: "op://Valheim/AWS OIDC/role_arn"
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.11"
+          cli_config_credentials_token: ${{ steps.load-secrets.outputs.TF_API_TOKEN }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6.0.0
@@ -51,8 +54,6 @@ jobs:
         working-directory: ${{ matrix.module }}
         run: terraform init
         shell: bash
-        env:
-          TF_API_TOKEN: ${{ steps.load-secrets.outputs.TF_API_TOKEN }}
 
       - name: Terraform Validate
         id: validate
