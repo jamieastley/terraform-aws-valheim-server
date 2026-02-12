@@ -37,7 +37,7 @@ data "http" "dev_outbound_ip" {
 
 module "valheim" {
   source  = "jamieastley/ec2-template/aws"
-  version = "0.6.0"
+  version = "0.7.0"
 
   app_name          = var.app_name
   app_description   = "Valheim game server"
