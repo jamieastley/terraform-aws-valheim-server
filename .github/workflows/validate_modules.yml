@@ -33,7 +33,7 @@ jobs:
           TF_API_TOKEN: "op://Valheim/Terraform - GitHub Actions/credential"
           AWS_OIDC_ROLE_ARN: "op://Valheim/AWS OIDC/role_arn"
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.11"
           cli_config_credentials_token: ${{ steps.load-secrets.outputs.TF_API_TOKEN }}
@@ -78,7 +78,7 @@ jobs:
           TF_API_TOKEN: "op://Valheim/Terraform - GitHub Actions/credential"
           AWS_OIDC_ROLE_ARN: "op://Valheim/AWS OIDC/role_arn"
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.11"
           cli_config_credentials_token: ${{ steps.load-secrets.outputs.TF_API_TOKEN }}
