@@ -1,4 +1,3 @@
-TF_WORKSPACE = valheim-dev
 TF_PLAN_NAME = tf_plan
 ENV_FILE = .env
 
