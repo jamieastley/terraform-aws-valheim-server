@@ -34,6 +34,24 @@ The following AWS environment variables must be set:
 - `oidc_role_apply_plan`: Apply the Terraform plan.
 - `oidc_role_destroy`: Destroy all managed infrastructure.
 
+## Determining least-privilege IAM roles
+
+To easily determine the least-privilege IAM permissions required for the role, [iamlive](https://github.com/iann0036/iamlive/issues/74)
+can be used while running the root module to generate the required policy document.
+
+In a separate terminal window, run:
+```shell
+iamlive --set-ini --mode proxy
+```
+
+Then ensure these values are set within your Terraform terminal instance:
+```shell
+export HTTP_PROXY=http://127.0.0.1:10080
+export HTTPS_PROXY=http://127.0.0.1:10080
+export AWS_CA_BUNDLE=~/.iamlive/ca.pem
+```
+
+
 ## References
 
 - [aws-actions/configure-aws-credentials](https://github.com/aws-actions/configure-aws-credentials)
