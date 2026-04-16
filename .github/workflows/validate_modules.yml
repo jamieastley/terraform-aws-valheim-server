@@ -27,7 +27,7 @@ jobs:
 
       - name: Load secrets
         id: load-secrets
-        uses: 1password/load-secrets-action@v3
+        uses: 1password/load-secrets-action@v4
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           TF_API_TOKEN: "op://Valheim/Terraform - GitHub Actions/credential"
@@ -72,7 +72,7 @@ jobs:
 
       - name: Load secrets
         id: load-secrets
-        uses: 1password/load-secrets-action@v3
+        uses: 1password/load-secrets-action@v4
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           TF_API_TOKEN: "op://Valheim/Terraform - GitHub Actions/credential"
