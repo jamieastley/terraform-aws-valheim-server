@@ -23,7 +23,7 @@ jobs:
     permissions:
       id-token: write   # This is required for requesting the OIDC JWT
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Load secrets
         id: load-secrets
@@ -68,7 +68,7 @@ jobs:
       id-token: write   # This is required for requesting the JWT
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Load secrets
         id: load-secrets
