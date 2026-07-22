@@ -39,7 +39,7 @@ jobs:
           cli_config_credentials_token: ${{ steps.load-secrets.outputs.TF_API_TOKEN }}
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v6.0.0
+        uses: aws-actions/configure-aws-credentials@v6.2.3
         with:
           role-to-assume: ${{ steps.load-secrets.outputs.AWS_OIDC_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
@@ -84,7 +84,7 @@ jobs:
           cli_config_credentials_token: ${{ steps.load-secrets.outputs.TF_API_TOKEN }}
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v6.0.0
+        uses: aws-actions/configure-aws-credentials@v6.2.3
         with:
           role-to-assume: ${{ steps.load-secrets.outputs.AWS_OIDC_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
