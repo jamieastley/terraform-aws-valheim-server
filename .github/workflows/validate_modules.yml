@@ -35,7 +35,7 @@ jobs:
 
       - uses: hashicorp/setup-terraform@v4
         with:
-          terraform_version: "1.11"
+          terraform_version: "1.16"
           cli_config_credentials_token: ${{ steps.load-secrets.outputs.TF_API_TOKEN }}
 
       - name: Configure AWS Credentials
@@ -80,7 +80,7 @@ jobs:
 
       - uses: hashicorp/setup-terraform@v4
         with:
-          terraform_version: "1.11"
+          terraform_version: "1.16"
           cli_config_credentials_token: ${{ steps.load-secrets.outputs.TF_API_TOKEN }}
 
       - name: Configure AWS Credentials
